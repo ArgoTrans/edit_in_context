@@ -6,6 +6,41 @@ Run this demo for online word viewer, shows office viewer.
 python3 -m http.server
 ```
 
+## Editing a Word Doc
+
+See `Program.cs`. You can search and replace easily! Great!
+
+Then we can load it using an `<iframe>` (see below).
+
+Sample:
+
+```cs
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        string filePath = "word.docx";
+        string searchText = "Lorem ipsum dolor sit amet";
+        string replaceText = "Hello, world";
+
+        using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(filePath, true))
+        {
+            var body = wordDoc.MainDocumentPart.Document.Body;
+            foreach (var text in body.Descendants<Text>())
+            {
+                if (text.Text.Contains(searchText))
+                {
+                    text.Text = text.Text.Replace(searchText, replaceText);
+                }
+            }
+        }
+    }
+}
+```
+
 ## Actual Word Viewers (this demo)
 
 - Use an `<iframe>`
